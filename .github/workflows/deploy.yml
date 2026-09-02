@@ -18,8 +18,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            set -e
             cd /opt/pandinha-finances
             git pull origin main
-            docker build -t pandinha-finances:latest .
-            docker-compose up -d --force-recreate
+            docker compose --profile app up -d --build
             docker image prune -f
