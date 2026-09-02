@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: pandinha-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pandinha
+      POSTGRES_PASSWORD: pandinha
+      POSTGRES_DB: pandinha
+    ports:
+      - "5433:5432"
+    volumes:
+      - pandinha-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pandinha -d pandinha"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrations:
+    build:
+      context: .
+      target: migrator
+    container_name: pandinha-migrations
+    environment:
+      DATABASE_URL: postgresql://pandinha:pandinha@postgres:5432/pandinha?schema=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+    profiles: ["app"]
+
+  app:
+    build:
+      context: .
+      target: runner
+    container_name: pandinha-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://pandinha:pandinha@postgres:5432/pandinha?schema=public
+      SESSION_SECRET: ${SESSION_SECRET:?defina SESSION_SECRET no .env}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      APP_URL: ${APP_URL:-}
+    ports:
+      - "3002:3002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    profiles: ["app"]
+
+volumes:
+  pandinha-pgdata:

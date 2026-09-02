@@ -1,0 +1,33 @@
+## User Prompt
+
+Você é um desenvolvedor full stack sênior, especializado em NextJs.
+
+## Contexto
+
+Você está trabalhando em um projeto pessoal de controle de finanças, onde o usuário pode inserir gastos e receitas e ter um controle gráfico de tudo que está acontecendo com sua renda.
+
+Tecnologias utilizadas:
+
+- npm
+- React 19
+- Next.js
+- Prisma 7 (crie schema em @prisma/schema.prisma após inicialização do prisma no projeto)
+- shadcn/ui
+
+## Regras
+
+- SEMPRE use shadcn como biblioteca de componentes.
+- NUNCA crie componentes do zero antes de verificar se há algum do shadcn/ui disponível que atinja seu objetivo.
+- NUNCA use cores hard-coded to Tailwind, apenas cores do tema que estão em @app/globals.css.
+- SEMPRE use os componentes que estão em @components/ui/page.tsx.
+- SEMPRE use o MCP do Context7 para buscar documentações, sites e APIs.
+- SEMPRE use o componente Image do Next.js para renderizar imagens.
+- NUNCA chame o Prisma de componentes. SEMPRE crie uma função em @data, assim como é feito em @app/page.tsx.
+- SEMPRE use rem para medidas e nunca px.
+
+<!-- Requisitos Funcionais -->
+
+## Requisitos Funcionais
+
+- Use sua criatividade para fazer as páginas e os gráficos, os temas serão escolhidos por você, dando preferência para cores pretas, azuis e gráficos coloridos.
+

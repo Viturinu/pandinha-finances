@@ -1,0 +1,25 @@
+name: Deploy via SSH
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy no servidor via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /opt/PandinhaFinances
+            git pull origin main
+            docker build -t pandinha-finances:latest .
+            docker-compose up -d --force-recreate
+            docker image prune -f

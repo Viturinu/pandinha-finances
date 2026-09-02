@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TipoLancamento {
+  RECEITA
+  DESPESA
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+  nome      String?
+  email     String   @unique
+  senha     String?
+  googleId  String?  @unique
+  imagemUrl String?
+  criadoEm  DateTime @default(now())
+
+  categorias      Categoria[]
+  formasPagamento FormaPagamento[]
+  lancamentos     Lancamento[]
+}
+
+model Categoria {
+  id        String         @id @default(cuid())
+  nome      String
+  tipo      TipoLancamento
+  usuarioId String
+  usuario   Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  lancamentos Lancamento[]
+
+  @@unique([usuarioId, nome, tipo])
+  @@index([usuarioId, tipo])
+}
+
+model FormaPagamento {
+  id        String  @id @default(cuid())
+  nome      String
+  usuarioId String
+  usuario   Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  lancamentos Lancamento[]
+
+  @@unique([usuarioId, nome])
+  @@index([usuarioId])
+}
+
+model Lancamento {
+  id               String         @id @default(cuid())
+  usuarioId        String
+  usuario          Usuario        @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  data             DateTime       @db.Timestamptz(3)
+  tipo             TipoLancamento
+  categoriaId      String
+  categoria        Categoria      @relation(fields: [categoriaId], references: [id], onDelete: Restrict)
+  descricao        String
+  formaPagamentoId String
+  formaPagamento   FormaPagamento @relation(fields: [formaPagamentoId], references: [id], onDelete: Restrict)
+  valor            Decimal        @db.Decimal(10, 2)
+  criadoEm         DateTime       @default(now())
+
+  @@index([usuarioId, data])
+  @@index([usuarioId, tipo])
+  @@index([categoriaId])
+  @@index([formaPagamentoId])
+}
