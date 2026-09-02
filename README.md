@@ -108,11 +108,13 @@ Como o Prisma 7 usa **driver adapter** (`@prisma/adapter-pg`), o client é JavaS
 
 ```bash
 # sobe banco, aplica as migrations e inicia a aplicação
-docker compose --profile app up --build -d
+docker compose up -d --build
 
 # só o banco (fluxo de desenvolvimento com `npm run dev` na máquina)
-docker compose up -d
+docker compose up -d postgres
 ```
+
+> O arquivo segue a **Compose Specification** (sem chave `version:`, com `healthcheck` e `depends_on: condition:`). Isso exige **Compose v2** — o plugin `docker compose`. O `docker-compose` v1 está EOL e não interpreta esse formato corretamente.
 
 O serviço `app` lê `SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` e `APP_URL` do seu `.env` — o arquivo **não** entra na imagem (está no `.dockerignore`), os valores chegam como variáveis de ambiente em runtime. `SESSION_SECRET` é obrigatório e o compose falha explicitamente se estiver vazio.
 

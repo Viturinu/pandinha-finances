@@ -28,7 +28,6 @@ services:
       postgres:
         condition: service_healthy
     restart: "no"
-    profiles: ["app"]
 
   app:
     build:
@@ -49,7 +48,6 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    profiles: ["app"]
 
 volumes:
   pandinha-pgdata:
