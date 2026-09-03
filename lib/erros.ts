@@ -28,3 +28,18 @@ export class ErroDeConflito extends ErroDeNegocio {
     this.name = "ErroDeConflito";
   }
 }
+
+export const detalharErro = (erro: unknown) =>
+  erro instanceof Error ? `${erro.name}: ${erro.message}` : String(erro);
+
+export const registrarErro = (contexto: string, erro: unknown) => {
+  console.error(
+    `[${contexto}] ${detalharErro(erro)}`,
+    erro instanceof Error ? erro.stack : erro
+  );
+};
+
+export const mensagemParaUsuario = (erro: unknown, mensagem: string) =>
+  process.env.NODE_ENV === "production"
+    ? mensagem
+    : `${mensagem} (${detalharErro(erro)})`;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { ErroDeNegocio } from "@/lib/erros";
+import { ErroDeNegocio, mensagemParaUsuario, registrarErro } from "@/lib/erros";
 
 export type RespostaDeErro = {
   mensagem: string;
@@ -11,7 +11,7 @@ export type RespostaDeErro = {
 export const responderComSucesso = <T>(dados: T, status = 200) =>
   NextResponse.json(dados, { status });
 
-export const responderComErro = (erro: unknown) => {
+export const responderComErro = (erro: unknown, contexto = "api") => {
   if (erro instanceof z.ZodError) {
     return NextResponse.json<RespostaDeErro>(
       {
@@ -29,10 +29,15 @@ export const responderComErro = (erro: unknown) => {
     );
   }
 
-  console.error(erro);
+  registrarErro(contexto, erro);
 
   return NextResponse.json<RespostaDeErro>(
-    { mensagem: "Erro inesperado ao processar a requisição." },
+    {
+      mensagem: mensagemParaUsuario(
+        erro,
+        "Erro inesperado ao processar a requisição."
+      ),
+    },
     { status: 500 }
   );
 };

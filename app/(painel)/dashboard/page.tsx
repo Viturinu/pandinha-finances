@@ -3,6 +3,7 @@ import { FiltroPeriodo } from "@/components/dashboard/filtro-periodo";
 import { GraficoCategorias } from "@/components/dashboard/grafico-categorias";
 import { GraficoEvolucao } from "@/components/dashboard/grafico-evolucao";
 import { GraficoMensal } from "@/components/dashboard/grafico-mensal";
+import { SugestoesMelhoria } from "@/components/dashboard/sugestoes-melhoria";
 import { CabecalhoPagina } from "@/components/painel/cabecalho-pagina";
 import { obterDadosDashboard } from "@/data/dashboard";
 import { exigirSessaoNaPagina } from "@/lib/autenticacao";
@@ -48,6 +49,8 @@ export default async function PaginaDashboard(
         </div>
 
         <GraficoEvolucao evolucao={dados.evolucao} />
+
+        <SugestoesMelhoria periodo={periodo} />
       </div>
     </>
   );

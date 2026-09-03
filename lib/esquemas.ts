@@ -59,9 +59,27 @@ export const esquemaPeriodo = z.object({
   ano: z.coerce.number().int().min(1970).max(2200),
 });
 
+export const IMPACTOS_SUGESTAO = ["alto", "medio", "baixo"] as const;
+
+export const esquemaSugestoesGeradas = z.object({
+  sugestoes: z
+    .array(
+      z.object({
+        titulo: textoObrigatorio("o titulo da sugestao", 120),
+        explicacao: textoObrigatorio("a explicacao da sugestao", 600),
+        impacto: z.enum(IMPACTOS_SUGESTAO),
+      })
+    )
+    .min(1),
+});
+
 export type EntradaCadastro = z.infer<typeof esquemaCadastro>;
 export type EntradaLogin = z.infer<typeof esquemaLogin>;
 export type EntradaCategoria = z.infer<typeof esquemaCategoria>;
 export type EntradaFormaPagamento = z.infer<typeof esquemaFormaPagamento>;
 export type EntradaLancamento = z.infer<typeof esquemaLancamento>;
 export type FiltroLancamentos = z.infer<typeof esquemaFiltroLancamentos>;
+export type ImpactoSugestao = (typeof IMPACTOS_SUGESTAO)[number];
+export type SugestaoGerada = z.infer<
+  typeof esquemaSugestoesGeradas
+>["sugestoes"][number];

@@ -3,6 +3,11 @@ const FORMATADOR_MOEDA = new Intl.NumberFormat("pt-BR", {
   currency: "BRL",
 });
 
+const FORMATADOR_PERCENTUAL = new Intl.NumberFormat("pt-BR", {
+  style: "percent",
+  maximumFractionDigits: 1,
+});
+
 const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
   day: "2-digit",
   month: "2-digit",
@@ -11,6 +16,9 @@ const FORMATADOR_DATA = new Intl.DateTimeFormat("pt-BR", {
 });
 
 export const formatarMoeda = (valor: number) => FORMATADOR_MOEDA.format(valor);
+
+export const formatarPercentual = (fracao: number) =>
+  FORMATADOR_PERCENTUAL.format(fracao);
 
 export const formatarData = (data: Date | string) =>
   FORMATADOR_DATA.format(typeof data === "string" ? new Date(data) : data);

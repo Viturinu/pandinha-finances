@@ -2,7 +2,11 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 import { entrarComGoogle } from "@/data/usuario";
-import { ErroDeNegocio } from "@/lib/erros";
+import {
+  ErroDeNegocio,
+  mensagemParaUsuario,
+  registrarErro,
+} from "@/lib/erros";
 import {
   buscarPerfilGoogle,
   montarUrlDeRetorno,
@@ -66,11 +70,11 @@ export async function GET(request: NextRequest) {
       return redirecionarComErro(request, erro.message);
     }
 
-    console.error(erro);
+    registrarErro("login-google", erro);
 
     return redirecionarComErro(
       request,
-      "Erro inesperado ao entrar com o Google."
+      mensagemParaUsuario(erro, "Erro inesperado ao entrar com o Google.")
     );
   }
 }
