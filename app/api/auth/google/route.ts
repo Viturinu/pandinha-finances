@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const estado = gerarSegredoAleatorio();
     const verificador = gerarSegredoAleatorio();
     const desafio = await gerarDesafioPkce(verificador);
-    const urlDeRetorno = montarUrlDeRetorno(request.nextUrl.origin);
+    const urlDeRetorno = montarUrlDeRetorno(request);
 
     const destino = montarUrlDeAutorizacao({ urlDeRetorno, estado, desafio });
     const armazenamento = await cookies();

@@ -1,4 +1,7 @@
+import type { NextRequest } from "next/server";
+
 import { ErroDeNegocio } from "@/lib/erros";
+import { montarUrlPublica } from "@/lib/url";
 import type { PerfilGoogle } from "@/data/usuario";
 
 const URL_AUTORIZACAO = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -27,8 +30,8 @@ const exigirCredenciais = () => {
   return { clientId, clientSecret };
 };
 
-export const montarUrlDeRetorno = (origem: string) =>
-  new URL(CAMINHO_RETORNO_GOOGLE, process.env.APP_URL || origem).toString();
+export const montarUrlDeRetorno = (request: NextRequest) =>
+  montarUrlPublica(request, CAMINHO_RETORNO_GOOGLE).toString();
 
 const paraBase64Url = (bytes: Uint8Array) =>
   Buffer.from(bytes)

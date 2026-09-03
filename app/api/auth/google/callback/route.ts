@@ -11,9 +11,10 @@ import {
   trocarCodigoPorToken,
 } from "@/lib/google";
 import { criarSessao } from "@/lib/sessao";
+import { montarUrlPublica } from "@/lib/url";
 
 const redirecionarComErro = (request: NextRequest, mensagem: string) => {
-  const destino = new URL("/login", request.nextUrl.origin);
+  const destino = montarUrlPublica(request, "/login");
   destino.searchParams.set("erro", mensagem);
 
   return NextResponse.redirect(destino);
@@ -51,7 +52,7 @@ export async function GET(request: NextRequest) {
     const tokenDeAcesso = await trocarCodigoPorToken({
       codigo,
       verificador,
-      urlDeRetorno: montarUrlDeRetorno(request.nextUrl.origin),
+      urlDeRetorno: montarUrlDeRetorno(request),
     });
 
     const perfil = await buscarPerfilGoogle(tokenDeAcesso);
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
 
     await criarSessao({ usuarioId: usuario.id, email: usuario.email });
 
-    return NextResponse.redirect(new URL("/dashboard", request.nextUrl.origin));
+    return NextResponse.redirect(montarUrlPublica(request, "/dashboard"));
   } catch (erro) {
     if (erro instanceof ErroDeNegocio) {
       return redirecionarComErro(request, erro.message);
