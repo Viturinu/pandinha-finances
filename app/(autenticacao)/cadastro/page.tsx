@@ -1,6 +1,8 @@
 import { FormularioCadastro } from "@/components/autenticacao/formulario-cadastro";
 import { googleEstaConfigurado } from "@/lib/google";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Criar conta | Pandinha Finances" };
 
 export default function PaginaCadastro() {

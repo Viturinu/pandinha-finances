@@ -118,6 +118,14 @@ docker compose up -d postgres
 
 O serviço `app` lê `SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` e `APP_URL` do seu `.env` — o arquivo **não** entra na imagem (está no `.dockerignore`), os valores chegam como variáveis de ambiente em runtime. `SESSION_SECRET` é obrigatório e o compose falha explicitamente se estiver vazio.
 
+> **Variáveis de runtime não podem ser lidas em página estática.** As telas `/login` e `/cadastro` decidem se mostram o botão do Google a partir de `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET`. Como essas variáveis só existem em runtime (nunca no build), as duas páginas declaram `export const dynamic = "force-dynamic"`. Sem isso o Next as pré-renderiza durante o `next build` — quando as chaves ainda não existem — e congela "Google desabilitado" no HTML, independentemente do que o container receba depois.
+
+Para conferir se as variáveis chegaram ao container:
+
+```bash
+docker compose exec app env | grep -E "GOOGLE|APP_URL"
+```
+
 O `migrations` roda uma vez e sai; o `app` só sobe depois que ele termina com sucesso (`service_completed_successfully`), e ambos esperam o healthcheck do Postgres.
 
 ## Rotas da API

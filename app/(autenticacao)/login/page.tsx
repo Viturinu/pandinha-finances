@@ -4,6 +4,8 @@ import { FormularioLogin } from "@/components/autenticacao/formulario-login";
 import { Skeleton } from "@/components/ui/skeleton";
 import { googleEstaConfigurado } from "@/lib/google";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Entrar | Pandinha Finances" };
 
 export default function PaginaLogin() {
